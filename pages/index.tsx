@@ -1,5 +1,4 @@
 import { Box, FormControlLabel, Switch } from "@mui/material";
-import axios from "axios";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useState } from "react";
@@ -10,6 +9,7 @@ import { TodosRequest } from "../components/Todos/TodosRequest";
 import type { TodoFilter } from "../const/todos-filter";
 import type { TodoListFilter } from "../const/todos-list-filter";
 import type { CreateTodo } from "../types/todo";
+import { axios } from "../utils/axios";
 
 const Home: NextPage = () => {
   const [filter, setFilter] = useState<TodoFilter>("ALL");
