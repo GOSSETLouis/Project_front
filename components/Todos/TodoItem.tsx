@@ -84,8 +84,8 @@ const TodoItem = ({
               }}
             />
           )}
-          onChange={(date) => {
-            date !== null && setLineDate(date);
+          onChange={(date: Date | null) => {
+            date !== null && setLineDate(date.getTime());
           }}
         />
       </Stack>
