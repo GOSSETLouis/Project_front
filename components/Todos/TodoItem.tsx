@@ -14,7 +14,7 @@ import Image from "next/image";
 import type { ChangeEvent, KeyboardEvent } from "react";
 import React, { useState } from "react";
 
-import { TodoItem } from "../../types/todo-item";
+import type { TodoItemProperties } from "../../types/todo-item";
 import { MyInput } from "../Form/Input";
 
 // Component TodoItem, represent every unique todo, contain the onlcick event
@@ -24,11 +24,11 @@ const TodoItem = ({
   isCompleted,
   onComplete,
   onUpdate,
-  deadLine,
+  deadline,
   listfilter,
   creationDate,
   onDelete,
-}: TodoItem): JSX.Element => {
+}: TodoItemProperties): JSX.Element => {
   const [mode, setMode] = useState("read");
   const [updatedValue, setUpdatedValue] = useState(name);
   const handleTodoClick = (): void => {
@@ -60,11 +60,9 @@ const TodoItem = ({
     onUpdate(id, updatedValue, LineDate);
     setMode("read");
   };
-
-  const date = new Date(creationDate);
-  const formatDate = format(date, "yyyy-MM-dd");
+  const formatDate = format(creationDate, "yyyy-MM-dd");
   // eslint-disable-next-line unicorn/no-null
-  const deadLineDate = deadLine !== null ? deadLine : null;
+  const deadLineDate = deadline !== null ? deadline : null;
   const formatDeadline =
     deadLineDate !== null && format(deadLineDate, "yyyy-MM-dd");
   const [LineDate, setLineDate] = React.useState<number | null>(deadLineDate);

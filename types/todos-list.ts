@@ -1,6 +1,6 @@
 import type { Todo } from "./todo";
 
-export interface TodosList {
+export interface TodosListProperties {
   filter: string;
   todos: Todo[];
   listfilter: boolean;

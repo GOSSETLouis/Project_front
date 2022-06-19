@@ -1,5 +1,4 @@
 /* eslint-disable no-nested-ternary */
-import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useState } from "react";
 import { TailSpin } from "react-loader-spinner";
 
@@ -18,10 +17,7 @@ const TodosRequest = ({
     "error" | "loading" | "success"
   >("loading");
   // state todos
-  const [todosData, setTodosData]: [
-    Todo[] | undefined,
-    Dispatch<SetStateAction<Todo[] | undefined>>
-  ] = useState();
+  const [todosData, setTodosData] = useState<Todo[]>([]);
   const getTodos = (): void => {
     setRequestState("loading");
     axios
@@ -73,9 +69,7 @@ const TodosRequest = ({
         setRequestState("error");
       });
   };
-  const sortedtodos = todosData?.sort(
-    (a, b) => b.creationDate - a.creationDate
-  );
+  const sortedtodos = todosData.sort((a, b) => b.creationDate - a.creationDate);
   return (
     <>
       {requestState === "error" ? (
@@ -86,7 +80,7 @@ const TodosRequest = ({
         <TodosList
           filter={filter}
           listfilter={listFilter}
-          todos={sortedtodos as Todo[]}
+          todos={sortedtodos}
           onCompleteTodo={HandleCompletedTodo}
           onUpdateTodo={updateTodos}
           onDeleteTodo={handleDeletedTodos}

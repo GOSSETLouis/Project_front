@@ -59,7 +59,7 @@ const TodoAddForm = ({
         name: inputValue,
         isCompleted: false,
         // eslint-disable-next-line unicorn/no-null
-        deadLine: mode === "DeadLine" ? value.getDate() : null,
+        deadline: mode === "DeadLine" ? value.getDate() : null,
         creationDate: now,
       };
       onAdd(newTodo);

@@ -1,7 +1,7 @@
 import { List } from "@mui/material";
 import { useMemo } from "react";
 
-import { TodosList } from "../../types/todos-list";
+import type { TodosListProperties } from "../../types/todos-list";
 import { TodoItem } from "./TodoItem";
 // import mc from "./todos-list.module.scss";
 
@@ -13,7 +13,7 @@ const TodosList = ({
   onCompleteTodo,
   onUpdateTodo,
   onDeleteTodo,
-}: TodosList): JSX.Element => {
+}: TodosListProperties): JSX.Element => {
   const handleComplete = (id: number, isCompleted: boolean): void => {
     onCompleteTodo(id, isCompleted);
   };
@@ -38,7 +38,7 @@ const TodosList = ({
           return !todo.isCompleted;
         }
         if (filter === "DEADLINE") {
-          return todo.deadLine;
+          return todo.deadline;
         }
         return todos;
       }),
@@ -54,7 +54,7 @@ const TodosList = ({
       onComplete={handleComplete}
       onUpdate={handleUpdateTodos}
       // eslint-disable-next-line unicorn/no-null
-      deadLine={todo.deadLine !== null ? todo.deadLine : null}
+      deadline={todo.deadline !== null ? todo.deadline : null}
       listfilter={listfilter}
       creationDate={todo.creationDate}
       onDelete={handleTodoDelete}
