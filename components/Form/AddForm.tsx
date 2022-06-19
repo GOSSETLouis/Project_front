@@ -58,6 +58,7 @@ const TodoAddForm = ({
       const newTodo = {
         name: inputValue,
         isCompleted: false,
+        // eslint-disable-next-line unicorn/no-null
         deadLine: mode === "DeadLine" ? value.getDate() : null,
         creationDate: now,
       };

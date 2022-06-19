@@ -1,37 +1,37 @@
 import { Box, FormControlLabel, Switch } from "@mui/material";
 import axios from "axios";
 import type { NextPage } from "next";
+import Head from "next/head";
 import { useState } from "react";
 
 import { TodoAddForm } from "../components/Form/AddForm";
-import { IndexPage } from "../components/head/head";
 import { TodosFilter } from "../components/Todos/TodosFilter";
 import { TodosRequest } from "../components/Todos/TodosRequest";
 import type { TodoFilter } from "../const/todos-filter";
 import type { TodoListFilter } from "../const/todos-list-filter";
-import type { CreateTodo, Todo } from "../types/todo";
+import type { CreateTodo } from "../types/todo";
 
 const Home: NextPage = () => {
-
   const [filter, setFilter] = useState<TodoFilter>("ALL");
   const [listFilter, setListFilter] = useState<TodoListFilter>(true);
   const listDisplay = (): void => {
     setListFilter(!listFilter);
   };
 
-  const [addState, setAddState] = useState<boolean>(false)
+  const [addState, setAddState] = useState<boolean>(false);
   const HandleAddTodo = (newTodo: CreateTodo): void => {
-    axios.post("/", newTodo)
-      .then((response) => {
-        setAddState(true)
-      });
-      setAddState(false)
+    void axios.post("/", newTodo).then(() => {
+      setAddState(true);
+    });
+    setAddState(false);
   };
-
 
   return (
     // Main components that build the main page
     <>
+      <Head>
+        <title>Todo-list</title>
+      </Head>
       <Box
         component="div"
         sx={{
@@ -39,7 +39,6 @@ const Home: NextPage = () => {
           flexDirection: "column",
         }}
       >
-        <IndexPage title="Todo-list" />
         <TodoAddForm onAdd={HandleAddTodo} />
         <Box component="div" sx={{ p: "5%" }}>
           <Box component="div" sx={{ border: "1px solid black" }}>
@@ -55,9 +54,9 @@ const Home: NextPage = () => {
               label="Display"
             />
             <TodosRequest
-            filter={filter}
-            listFilter={listFilter}
-            addState={addState}
+              filter={filter}
+              listFilter={listFilter}
+              addState={addState}
             />
           </Box>
         </Box>

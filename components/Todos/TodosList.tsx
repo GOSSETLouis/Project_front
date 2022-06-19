@@ -1,5 +1,5 @@
 import { List } from "@mui/material";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 
 import { TodosList } from "../../types/todos-list";
 import { TodoItem } from "./TodoItem";
@@ -18,10 +18,6 @@ const TodosList = ({
     onCompleteTodo(id, isCompleted);
   };
 
-  useEffect(() => {
-    console.log("coucou\n")
-  })
-
   const handleUpdateTodos = (
     id: number,
     value: string,
@@ -29,7 +25,7 @@ const TodosList = ({
   ): void => {
     onUpdateTodo(id, value, date);
   };
-  const handleTodoDelete = (id: number) => {
+  const handleTodoDelete = (id: number): void => {
     onDeleteTodo(id);
   };
   const getList = useMemo(
@@ -49,27 +45,21 @@ const TodosList = ({
     [filter, todos]
   );
 
-  const GetActualList = getList.map((todo) => {
-    console.log(typeof todo.creationDate);
-    return (
-      <TodoItem
-        key={todo.id}
-        name={todo.name}
-        id={todo.id}
-        isCompleted={todo.isCompleted}
-        onComplete={handleComplete}
-        onUpdate={handleUpdateTodos}
-        deadLine={
-          todo.deadLine !== null && todo.deadLine !== undefined
-            ? todo.deadLine
-            : null
-        }
-        listfilter={listfilter}
-        creationDate={todo.creationDate}
-        onDelete={handleTodoDelete}
-      />
-    );
-  });
+  const GetActualList = getList.map((todo) => (
+    <TodoItem
+      key={todo.id}
+      name={todo.name}
+      id={todo.id}
+      isCompleted={todo.isCompleted}
+      onComplete={handleComplete}
+      onUpdate={handleUpdateTodos}
+      // eslint-disable-next-line unicorn/no-null
+      deadLine={todo.deadLine !== null ? todo.deadLine : null}
+      listfilter={listfilter}
+      creationDate={todo.creationDate}
+      onDelete={handleTodoDelete}
+    />
+  ));
   // Return Getlist Component inside the ul
   return (
     <>

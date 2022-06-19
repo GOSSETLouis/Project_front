@@ -10,10 +10,7 @@ const MyInput = ({
   onChange,
   onKey,
 }: MyInput): JSX.Element => (
-  <Box
-    component="div"
-    sx={{ m: "0 10px", padding: "0px 0px", width: "100%" }}
-  >
+  <Box component="div" sx={{ m: "0 10px", padding: "0px 0px", width: "100%" }}>
     <Input
       sx={{ width: "100%", height: "56px" }}
       id={id}

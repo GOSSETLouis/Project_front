@@ -1,103 +1,99 @@
-import { exit } from "process";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { CreateTodo, Todo } from "../../types/todo";
-import { TodoRequestType } from "../../types/todos-request";
-import { TodosList } from "./TodosList";
-import { TailSpin } from 'react-loader-spinner';
+/* eslint-disable no-nested-ternary */
+import type { Dispatch, SetStateAction } from "react";
+import { useEffect, useState } from "react";
+import { TailSpin } from "react-loader-spinner";
+
+import type { Todo } from "../../types/todo";
+import type { TodoRequestType } from "../../types/todos-request";
 import { axios } from "../../utils/axios";
+import { TodosList } from "./TodosList";
 
-const TodosRequest = ({ filter, listFilter, addState }: TodoRequestType) => {
-    // state requete GET
-    const [requestState, setRequestState] = useState<
-        "error" | "loading" | "success"
-    >("loading");
-    // state todos
-    const [todosData, setTodosData]: [
-        Todo[] | undefined,
-        Dispatch<SetStateAction<Todo[] | undefined>>
-    ] = useState();
+const TodosRequest = ({
+  filter,
+  listFilter,
+  addState,
+}: TodoRequestType): JSX.Element => {
+  // state requete GET
+  const [requestState, setRequestState] = useState<
+    "error" | "loading" | "success"
+  >("loading");
+  // state todos
+  const [todosData, setTodosData]: [
+    Todo[] | undefined,
+    Dispatch<SetStateAction<Todo[] | undefined>>
+  ] = useState();
+  const getTodos = (): void => {
+    setRequestState("loading");
+    axios
+      .get<Todo[]>("/")
+      .then((response) => {
+        setTodosData(response.data);
+        setRequestState("success");
+      })
+      .catch(() => {
+        setRequestState("error");
+      });
+  };
+  useEffect(() => {
+    getTodos();
+  }, [addState]);
 
-    let isActive = false;
-    if (requestState === "loading") {
-        isActive = true
-    }
-    const getTodos = (): void => {
-        setRequestState("loading");
-        axios
-            .get<Todo[]>("/")
-            .then((response) => {
-                setTodosData(response.data);
-                setRequestState("success");
-            })
-            .catch((e) => {
-                setRequestState("error");
-            });
-
-        console.log("Co");
-    };
-    useEffect(() => {
+  const HandleCompletedTodo = (id: number, isCompleted: boolean): void => {
+    axios
+      .patch(`/${id}`, {
+        isCompleted: !isCompleted,
+      })
+      .then(() => {
         getTodos();
-    }, [addState]);
+      })
+      .catch(() => {
+        setRequestState("error");
+      });
+  };
+  const handleDeletedTodos = (id: number): void => {
+    axios
+      .delete(`/${id}`)
+      .then(() => {
+        getTodos();
+      })
+      .catch(() => {
+        setRequestState("error");
+      });
+  };
+  const updateTodos = (id: number, name: string, date: number | null): void => {
+    axios
+      .patch(`/Todo/Change/${id}`, {
+        name: name,
+        date: date,
+      })
+      .then(() => {
+        getTodos();
+      })
+      .catch(() => {
+        setRequestState("error");
+      });
+  };
+  const sortedtodos = todosData?.sort(
+    (a, b) => b.creationDate - a.creationDate
+  );
+  return (
+    <>
+      {requestState === "error" ? (
+        <p>Error</p>
+      ) : requestState === "loading" ? (
+        <TailSpin ariaLabel="loading-indicator" />
+      ) : (
+        <TodosList
+          filter={filter}
+          listfilter={listFilter}
+          todos={sortedtodos as Todo[]}
+          onCompleteTodo={HandleCompletedTodo}
+          onUpdateTodo={updateTodos}
+          onDeleteTodo={handleDeletedTodos}
+        />
+      )}
+    </>
+  );
+};
 
-    const HandleCompletedTodo = (id: number, isCompleted: boolean): void => {
-        axios
-            .patch(`/${id}`, {
-                isCompleted: !isCompleted,
-            })
-            .then((response) => {
-                console.log(response);
-                getTodos();
-            })
-            .catch((e) => {
-                setRequestState("error");
-            });
-
-        console.log("Co");
-    };
-    const handleDeletedTodos = (id: number): void => {
-        axios
-            .delete(`/${id}`)
-            .then((response) => {
-                console.log(response);
-                getTodos();
-            })
-            .catch((e) => {
-                setRequestState("error");
-            });
-    };
-    const updateTodos = (id: number, name: string, date: number | null): void => {
-        axios
-            .patch(`/Todo/Change/${id}`, {
-                name: name,
-                date: date
-            })
-            .then((response) => {
-                console.log(response);
-                getTodos();
-            })
-            .catch((e) => {
-                setRequestState("error");
-            });
-
-        console.log("Co");
-    };
-    const sortedtodos = todosData?.sort(
-        (a, b) => b.creationDate - a.creationDate
-    );
-    return (
-        <>
-            {requestState === "error" ? (<p>Error</p>) : requestState === "loading" ? (<TailSpin ariaLabel="loading-indicator" />) : <TodosList
-                filter={filter}
-                listfilter={listFilter}
-                todos={sortedtodos as Todo[]}
-                onCompleteTodo={HandleCompletedTodo}
-                onUpdateTodo={updateTodos}
-                onDeleteTodo={handleDeletedTodos}
-            />}
-
-        </>
-
-    )
-}
-
-export { TodosRequest }
+export { TodosRequest };

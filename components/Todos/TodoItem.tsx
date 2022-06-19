@@ -63,8 +63,10 @@ const TodoItem = ({
 
   const date = new Date(creationDate);
   const formatDate = format(date, "yyyy-MM-dd");
+  // eslint-disable-next-line unicorn/no-null
   const deadLineDate = deadLine !== null ? deadLine : null;
-  const formatDeadline = deadLineDate && format(deadLineDate, "yyyy-MM-dd");
+  const formatDeadline =
+    deadLineDate !== null && format(deadLineDate, "yyyy-MM-dd");
   const [LineDate, setLineDate] = React.useState<number | null>(deadLineDate);
 
   const MaterialUIPickers = (): JSX.Element => (
@@ -85,7 +87,7 @@ const TodoItem = ({
             />
           )}
           onChange={(date) => {
-            date && setLineDate(date);
+            date !== null && setLineDate(date);
           }}
         />
       </Stack>
@@ -106,17 +108,17 @@ const TodoItem = ({
         style={
           isCompleted
             ? {
-              color: "grey",
-              cursor: "pointer",
-              textAlign: "center",
-              background:
-                "linear-gradient(to top, #fff calc(50% - 3px), #aaa, #fff calc(50% + 3px) )",
-            }
+                color: "grey",
+                cursor: "pointer",
+                textAlign: "center",
+                background:
+                  "linear-gradient(to top, #fff calc(50% - 3px), #aaa, #fff calc(50% + 3px) )",
+              }
             : {
-              color: "black",
-              cursor: "pointer",
-              textAlign: "center",
-            }
+                color: "black",
+                cursor: "pointer",
+                textAlign: "center",
+              }
         }
       >
         {mode === "read" ? (
@@ -149,7 +151,7 @@ const TodoItem = ({
               }}
               onClick={handleTodoClick}
             >
-              {formatDeadline != undefined ? "DeadLine : " : "No DeadLine"}
+              {formatDeadline !== false ? "DeadLine : " : "No DeadLine"}
               {formatDeadline}
             </ListItemText>
             <Button
@@ -282,26 +284,28 @@ const TodoItem = ({
                 style={
                   isCompleted
                     ? {
-                      color: "grey",
-                      cursor: "pointer",
-                      textAlign: "center",
-                      background:
-                        "linear-gradient(to top right, #fff calc(50% - 1px), #aaa, #fff calc(50% + 1px) )",
-                    }
+                        color: "grey",
+                        cursor: "pointer",
+                        textAlign: "center",
+                        background:
+                          "linear-gradient(to top right, #fff calc(50% - 1px), #aaa, #fff calc(50% + 1px) )",
+                      }
                     : {
-                      color: "black",
-                      cursor: "pointer",
-                      textAlign: "center",
-                    }
+                        color: "black",
+                        cursor: "pointer",
+                        textAlign: "center",
+                      }
                 }
               >
-                <Box component="div" sx={{ fontSize: "25px", m: "10px 0px" }} onClick={handleTodoClick}>
+                <Box
+                  component="div"
+                  sx={{ fontSize: "25px", m: "10px 0px" }}
+                  onClick={handleTodoClick}
+                >
                   {name}
                 </Box>
                 <Box component="div" sx={{ mt: "20px" }}>
-                  {formatDeadline != undefined
-                    ? "DeadLine : "
-                    : "No DeadLine"}
+                  {formatDeadline !== false ? "DeadLine : " : "No DeadLine"}
                   {formatDeadline}
                 </Box>
                 <Box
@@ -428,18 +432,10 @@ const TodoItem = ({
             )}
           </Box>
         </ListItem>
-      </Box >
-    </>
-  )
-  return (
-    <>
-      {listfilter ? (
-        <DisplayList/>
-      ) : (
-        <DisplayCard/>
-      )}
+      </Box>
     </>
   );
+  return <>{listfilter ? <DisplayList /> : <DisplayCard />}</>;
 };
 
 export { TodoItem };

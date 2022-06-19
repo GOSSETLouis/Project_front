@@ -90,7 +90,7 @@ const TodosFilter = ({ filter, click }: TodosFilter): JSX.Element => (
               : {
                   justifyContent: "center",
                   width: "25%",
-                  color: "#363C4A", 
+                  color: "#363C4A",
                   borderRadius: "3px",
                   backgroundColor: "#79DAE8",
                 }
