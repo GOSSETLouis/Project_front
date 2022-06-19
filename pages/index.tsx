@@ -21,7 +21,7 @@ const Home: NextPage = () => {
 
   const [addState, setAddState] = useState<boolean>(false)
   const HandleAddTodo = (newTodo: CreateTodo): void => {
-    axios.post("http://localhost:8080", newTodo)
+    axios.post("/", newTodo)
       .then((response) => {
         setAddState(true)
       });

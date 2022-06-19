@@ -1,10 +1,10 @@
-import axios from "axios";
 import { exit } from "process";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { CreateTodo, Todo } from "../../types/todo";
 import { TodoRequestType } from "../../types/todos-request";
 import { TodosList } from "./TodosList";
 import { TailSpin } from 'react-loader-spinner';
+import { axios } from "../../utils/axios";
 
 const TodosRequest = ({ filter, listFilter, addState }: TodoRequestType) => {
     // state requete GET
@@ -24,7 +24,7 @@ const TodosRequest = ({ filter, listFilter, addState }: TodoRequestType) => {
     const getTodos = (): void => {
         setRequestState("loading");
         axios
-            .get<Todo[]>("http://localhost:8080")
+            .get<Todo[]>("/")
             .then((response) => {
                 setTodosData(response.data);
                 setRequestState("success");
@@ -41,7 +41,7 @@ const TodosRequest = ({ filter, listFilter, addState }: TodoRequestType) => {
 
     const HandleCompletedTodo = (id: number, isCompleted: boolean): void => {
         axios
-            .patch(`http://localhost:8080/${id}`, {
+            .patch(`/${id}`, {
                 isCompleted: !isCompleted,
             })
             .then((response) => {
@@ -56,7 +56,7 @@ const TodosRequest = ({ filter, listFilter, addState }: TodoRequestType) => {
     };
     const handleDeletedTodos = (id: number): void => {
         axios
-            .delete(`http://localhost:8080/${id}`)
+            .delete(`/${id}`)
             .then((response) => {
                 console.log(response);
                 getTodos();
@@ -67,7 +67,7 @@ const TodosRequest = ({ filter, listFilter, addState }: TodoRequestType) => {
     };
     const updateTodos = (id: number, name: string, date: number | null): void => {
         axios
-            .patch(`http://localhost:8080/Todo/Change/${id}`, {
+            .patch(`/Todo/Change/${id}`, {
                 name: name,
                 date: date
             })
